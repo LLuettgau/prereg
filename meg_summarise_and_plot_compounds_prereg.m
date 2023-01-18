@@ -77,11 +77,18 @@ for iTT = 1:size(PRE_POST_seq_diff,5)
                 null_dist = max(null_means, [], 1);
                 figure, hist(null_dist)
                 realval_40ms = mean(b(4, 1, :));
-                FINAL_PVAL = mean(realval_40ms <= null_dist);
+                realval_50ms = mean(b(5, 1, :));
+                realval_60ms = mean(b(6, 1, :));
+
+                PVALS(1) = mean(realval_40ms <= null_dist);
+                PVALS(2) = mean(realval_50ms <= null_dist);
+                PVALS(3) = mean(realval_60ms <= null_dist);
+                FINAL_PVAL = min(PVALS);
+                
                 hold on, plot(realval_40ms * [1 1], [0 250])
                 % print empirical p-values of sequenceness effect (one-tailed)
                 disp(["FINAL P VALUE = " num2str(FINAL_PVAL)])
-            end
+             end
             
             if isess == 1
                ylabel('sequenceness', 'FontSize', 16)
@@ -91,8 +98,7 @@ for iTT = 1:size(PRE_POST_seq_diff,5)
             if l1reg == 1 || l1reg == (size(PRE_POST_seq_diff,6) / 2) + 1  
                 title([tt ', training time: ' num2str(is.tss(iTT) * 10) ' ms'], 'FontSize', 16)
             end
-            %ylim([-0.02 0.02])
-            %ylim([-.15 .15])
+           
             if l1reg == size(PRE_POST_seq_diff,6)
                 xlabel('lag (ms)', 'FontSize', 16)
             end
